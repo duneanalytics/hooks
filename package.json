@@ -4,12 +4,12 @@
   "description": "A collection of React hooks for Dune Analytics.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c rollup.config.mjs",
+    "build": "tsc && rollup -c rollup.config.mjs",
     "watch": "rollup -c rollup.config.mjs -w",
     "prepare": "npm run build",
     "clean": "rm -rf node_modules package-lock.json dist",

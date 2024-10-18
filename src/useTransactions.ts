@@ -1,6 +1,6 @@
 import {
     TokenBalancesParams,
-    BalanceData,
+    TransactionData,
     FetchError,
   } from "./types";
   import { fetchTransactions } from "./duneApi";
@@ -13,7 +13,7 @@ import {
     params: TokenBalancesParams
   ) => {
     const [state, setState] = useState<{
-      data: BalanceData | null;
+      data: TransactionData | null;
       error: FetchError | null;
       isLoading: boolean;
       nextOffset: string | null;  // Track next_offset
@@ -38,16 +38,18 @@ import {
       setState(prevState => ({ ...prevState, isLoading: true }));
   
       try {
-        // Include offset in the API request if it's available
-        const updatedParams = { ...memoizedParams, offset };
+        // Convert offset to number or undefined
+        const updatedParams = { 
+          ...memoizedParams, 
+          offset: offset ? parseInt(offset, 10) : undefined 
+        };
         const result = await fetchTransactions(walletAddress, updatedParams, apiKey);
   
         setState(prevState => ({
           ...prevState,
-          data: result,
-          nextOffset: result.next_offset || null,  // Store the next_offset for pagination
+          data: result as TransactionData, // Type assertion
+          nextOffset: result.next_offset || null,
           isLoading: false,
-          // If there's a new offset, append it to the list for pagination
           offsets: offset ? [...prevState.offsets, offset] : prevState.offsets,
         }));
       } catch (err) {

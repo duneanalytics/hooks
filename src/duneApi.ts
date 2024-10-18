@@ -1,5 +1,5 @@
 
-import {BalanceData, TokenBalancesParams} from "./types";
+import {BalanceData, TokenBalancesParams, TransactionData} from "./types";
 
 const BALANCE_API_BASE_URL = "https://api.dune.com/api/beta/balance";
 const TRANSACTIONS_API_BASE_URL = "https://api.dune.com/api/beta/transactions";
@@ -34,7 +34,7 @@ export async function fetchBalances(walletAddress: string, params: TokenBalances
   return response.json();
 }
 
-export async function fetchTransactions(walletAddress: string, params: TokenBalancesParams, duneApiKey: string): Promise<BalanceData> {
+export async function fetchTransactions(walletAddress: string, params: TokenBalancesParams, duneApiKey: string): Promise<TransactionData> {
     const queryParams = getQueryParams(params)
     const apiUrl = `${TRANSACTIONS_API_BASE_URL}/${walletAddress}?${queryParams.toString()}`;
 

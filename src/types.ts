@@ -50,3 +50,21 @@ type TokenBalance = {
       refetchInterval?: number;
     }
   };
+
+export type Transaction = {
+  // Add fields that represent a single transaction
+  // This is an example, adjust according to your actual data structure
+  hash: string;
+  from: string;
+  to: string;
+  value: string;
+  // ... other transaction fields
+};
+
+export type TransactionData = {
+  request_time: string;
+  response_time: string;
+  wallet_address: string;
+  transactions: Transaction[];
+  next_offset?: string | null;
+};
