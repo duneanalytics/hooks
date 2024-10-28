@@ -1,7 +1,7 @@
 import {
-    TokenBalancesParams,
     TransactionData,
     FetchError,
+    TransactionsParams,
   } from "./types";
   import { fetchTransactions } from "./duneApi";
   import { useState, useEffect } from "react";
@@ -10,7 +10,7 @@ import {
   
   export const useTransactions = (
     walletAddress: string,
-    params: TokenBalancesParams
+    params: TransactionsParams
   ) => {
     const [state, setState] = useState<{
       data: TransactionData | null;
@@ -41,7 +41,7 @@ import {
         // Convert offset to number or undefined
         const updatedParams = { 
           ...memoizedParams, 
-          offset: offset ? parseInt(offset, 10) : undefined 
+          offset: offset ?? undefined 
         };
         const result = await fetchTransactions(walletAddress, updatedParams, apiKey);
   

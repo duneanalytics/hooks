@@ -40,7 +40,29 @@ type TokenBalance = {
     /** Maximum number of transactions to return */
     limit?: number;
     /** The offset to paginate through result sets. This is a cursor being passed from the previous response, only use what the backend returns here. */
-    offset?: number;
+    offset?: string;
+    /** A comma separated list of additional metadata fields to include for each token. Supported values: logo, url */
+    metadata?: string | null;
+  };
+
+  export type TransactionsParams = {
+    /** The offset to paginate through result sets. This is a cursor being passed from the previous response, only use what the backend has returned on previous responses. */
+    offset?: string | null;
+    
+    /** Maximum number of transactions to return */
+    limit?: number | null;
+    
+    /** Comma separated list of chain ids to get transactions for */
+    chainIds?: string | null;
+    
+    /** Return only transactions with this method id */
+    method_id?: string | null;
+    
+    /** Filter transactions to a given address */
+    to?: string | null;
+    
+    /** Return abi decoded transactions and logs */
+    decode?: boolean | null;
   };
   
   export type UseTokenBalancesConfig = {
@@ -52,13 +74,23 @@ type TokenBalance = {
   };
 
 export type Transaction = {
-  // Add fields that represent a single transaction
-  // This is an example, adjust according to your actual data structure
-  hash: string;
+  address: string;
+  block_hash: string;
+  block_number: string;
+  block_time: string;
+  block_version: number;
+  chain: string;
   from: string;
   to: string;
+  data: string;
+  gas_price: string;
+  hash: string;
+  index: string;
+  max_fee_per_gas: string;
+  max_priority_fee_per_gas: string;
+  nonce: string;
+  transaction_type: string;
   value: string;
-  // ... other transaction fields
 };
 
 export type TransactionData = {
