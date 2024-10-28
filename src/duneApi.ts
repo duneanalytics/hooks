@@ -1,11 +1,10 @@
 
-import {BalanceData, TokenBalancesParams, TransactionData} from "./types";
+import {BalanceData, TokenBalancesParams, TransactionData, TransactionsParams} from "./types";
 
 const BALANCE_API_BASE_URL = "https://api.dune.com/api/beta/balance";
 const TRANSACTIONS_API_BASE_URL = "https://api.dune.com/api/beta/transactions";
 
-
-const getQueryParams = (params: TokenBalancesParams): URLSearchParams => {
+const getBalanceQueryParams = (params: TokenBalancesParams): URLSearchParams => {
     const queryParams = new URLSearchParams();
     if (params.allChains) queryParams.append("all_chains", "true");
     if (params.chainIds) queryParams.append("chain_ids", params.chainIds);
@@ -13,11 +12,24 @@ const getQueryParams = (params: TokenBalancesParams): URLSearchParams => {
     if (params.filters) queryParams.append("filters", params.filters);
     if (params.offset) queryParams.append("offset", params.offset.toString());
     if (params.limit) queryParams.append("limit", params.limit.toString());
+    if (params.metadata) queryParams.append("metadata", "logo,url");
     return queryParams;
   };
 
+  const getTransactionsQueryParams = (params: TransactionsParams): URLSearchParams => {
+    const queryParams = new URLSearchParams();
+    if (params.chainIds) queryParams.append("chain_ids", params.chainIds);
+    if (params.offset) queryParams.append("offset", params.offset.toString());
+    if (params.limit) queryParams.append("limit", params.limit.toString());
+    if (params.method_id) queryParams.append("method_id", params.method_id);
+    if (params.to) queryParams.append("to", params.to);
+    if (params.decode) queryParams.append("decode", params.decode.toString());
+    return queryParams;
+  };
+
+
 export async function fetchBalances(walletAddress: string, params: TokenBalancesParams, duneApiKey: string): Promise<BalanceData> {
-    const queryParams = getQueryParams(params)
+    const queryParams = getBalanceQueryParams(params)
     const apiUrl = `${BALANCE_API_BASE_URL}/${walletAddress}?${queryParams.toString()}`;
 
   const response = await fetch(apiUrl, {
@@ -34,8 +46,8 @@ export async function fetchBalances(walletAddress: string, params: TokenBalances
   return response.json();
 }
 
-export async function fetchTransactions(walletAddress: string, params: TokenBalancesParams, duneApiKey: string): Promise<TransactionData> {
-    const queryParams = getQueryParams(params)
+export async function fetchTransactions(walletAddress: string, params: TransactionsParams, duneApiKey: string): Promise<TransactionData> {
+    const queryParams = getTransactionsQueryParams(params)
     const apiUrl = `${TRANSACTIONS_API_BASE_URL}/${walletAddress}?${queryParams.toString()}`;
 
   const response = await fetch(apiUrl, {
