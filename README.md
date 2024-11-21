@@ -129,6 +129,9 @@ if (error) {
 }
 ``` 
 
+# Development
+Please use node v20 for development.
+
 # License
 
 This project is licensed under the MIT License.
