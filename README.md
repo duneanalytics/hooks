@@ -1,6 +1,6 @@
-Dune Analytics Realtime Hooks
+# React Hooks for Dune Echo
 
-This project integrates with the Dune Analytics realtime APIs to provide easy access to token balances and transaction data for given wallets. It uses the DuneProvider to manage API key authorization and provides convenient hooks for fetching token balances and paginated transaction data.
+This project integrates with the Dune Echo APIs to provide easy access to token balances and transaction data for given wallets. It uses the DuneProvider to manage API key authorization and provides convenient hooks for fetching token balances and paginated transaction data.
 
 # Installation
 
@@ -128,6 +128,9 @@ if (error) {
   return <p>Error: {error.message}</p>;
 }
 ``` 
+
+# Development
+Please use node v20 for development.
 
 # License
 

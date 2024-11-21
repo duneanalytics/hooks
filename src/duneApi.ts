@@ -1,8 +1,8 @@
 
 import {BalanceData, TokenBalancesParams, TransactionData, TransactionsParams} from "./types";
 
-const BALANCE_API_BASE_URL = "https://api.dune.com/api/beta/balance";
-const TRANSACTIONS_API_BASE_URL = "https://api.dune.com/api/beta/transactions";
+const BALANCE_API_BASE_URL = "https://api.dune.com/api/echo/v1/balances/evm/";
+const TRANSACTIONS_API_BASE_URL = "https://api.dune.com/api/echo/v1/transactions/evm/";
 
 const getBalanceQueryParams = (params: TokenBalancesParams): URLSearchParams => {
     const queryParams = new URLSearchParams();
