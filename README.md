@@ -132,6 +132,23 @@ if (error) {
 # Development
 Please use node v20 for development.
 
+# Deploying
+If you have the power to deploy, you can run the following commands to deploy the package to the npm registry:
+
+First tag a new version of the package:
+*note you can also use `minor` or `major` instead of `patch` to bump the version number accordingly*
+
+```bash
+npm version patch
+```
+
+Then run the following commands to deploy the package to the npm registry:
+
+```bash
+npm run build
+npm publish --access public
+```
+
 # License
 
 This project is licensed under the MIT License.
