@@ -37,7 +37,7 @@ Fetches token balances for a specific wallet address.
 ### Example Usage
 
 ```javascript
-import { useTokenBalances } from 'dune-api-sdk';
+import { useTokenBalances } from '@duneanalytics/hooks';
 
 const MyComponent = ({ account }) => {
   const { data, isLoading, error } = useTokenBalances(account.address, {});
@@ -75,7 +75,7 @@ Fetches paginated transaction data for a specific wallet address.
 ### Example Usage
 
 ```javascript
-import { useTransactions } from 'dune-api-sdk';
+import { useTransactions } from '@duneanalytics/hooks';
 
 const TransactionHistory = ({ account }) => {
   const { data: transactionData, isLoading, error, nextPage, previousPage, currentPage } = useTransactions(account.address, {});
