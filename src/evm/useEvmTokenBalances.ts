@@ -1,12 +1,13 @@
-import { TokenBalancesParams, BalanceData, FetchError } from "./types";
-import { fetchBalances } from "./duneApi";
 import { useState, useEffect } from "react";
-import { useDeepMemo } from "./useDeepMemo";
-import { useGetApiKey } from "./provider";
 
-export const useTokenBalances = (
+import { TokenBalancesParams, BalanceData, FetchError } from "./types";
+import { fetchEvmBalances } from "./duneApi";
+import { useDeepMemo } from "../useDeepMemo";
+import { useGetApiKey } from "../provider";
+
+export const useEvmTokenBalances = (
   walletAddress: string,
-  params: TokenBalancesParams = {}
+  params: TokenBalancesParams
 ) => {
   const [state, setState] = useState<{
     data: BalanceData | null;
@@ -29,7 +30,7 @@ export const useTokenBalances = (
       setState((prevState) => ({ ...prevState, isLoading: true }));
 
       try {
-        const result = await fetchBalances(
+        const result = await fetchEvmBalances(
           walletAddress,
           memoizedParams,
           apiKey
@@ -53,3 +54,6 @@ export const useTokenBalances = (
 
   return state;
 };
+
+/** @deprecated */
+export const useTokenBalances = useEvmTokenBalances;
