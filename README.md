@@ -15,7 +15,7 @@ npm install @duneanalytics/hooks
 To use the Dune API, wrap your application in the DuneProvider and provide your Dune API key:
 
 ```javascript
-import { DuneProvider } from '@duneanalytics/hooks';
+import { DuneProvider } from "@duneanalytics/hooks";
 
 const App = () => (
   <DuneProvider duneApiKey={YOUR_API_KEY}>
@@ -26,7 +26,7 @@ const App = () => (
 
 # Props
 
-	•	duneApiKey: Required. The API key to authenticate your requests with Dune Analytics.
+    •	duneApiKey: Required. The API key to authenticate your requests with Dune Analytics.
 
 # Hooks
 
@@ -37,7 +37,7 @@ Fetches token balances for a specific wallet address.
 ### Example Usage
 
 ```javascript
-import { useTokenBalances } from '@duneanalytics/hooks';
+import { useTokenBalances } from "@duneanalytics/hooks";
 
 const MyComponent = ({ account }) => {
   const { data, isLoading, error } = useTokenBalances(account.address, {});
@@ -59,14 +59,14 @@ const MyComponent = ({ account }) => {
 
 ### Parameters
 
-	•	walletAddress: Required. The Ethereum wallet address for which to fetch token balances.
-	•	params: Optional. Additional parameters for the request (e.g., chain or token filters).
+    •	walletAddress: Required. The Ethereum wallet address for which to fetch token balances.
+    •	params: Optional. Additional parameters for the request (e.g., chain or token filters).
 
 ### Returns
 
-	•	data: Contains the list of token balances.
-	•	isLoading: A boolean indicating whether the request is in progress.
-	•	error: Contains any error that occurred during the request.
+    •	data: Contains the list of token balances.
+    •	isLoading: A boolean indicating whether the request is in progress.
+    •	error: Contains any error that occurred during the request.
 
 ## useTransactions
 
@@ -75,10 +75,17 @@ Fetches paginated transaction data for a specific wallet address.
 ### Example Usage
 
 ```javascript
-import { useTransactions } from '@duneanalytics/hooks';
+import { useTransactions } from "@duneanalytics/hooks";
 
 const TransactionHistory = ({ account }) => {
-  const { data: transactionData, isLoading, error, nextPage, previousPage, currentPage } = useTransactions(account.address, {});
+  const {
+    data: transactionData,
+    isLoading,
+    error,
+    nextPage,
+    previousPage,
+    currentPage,
+  } = useTransactions(account.address, {});
 
   if (isLoading) return <p>Loading transactions...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -106,37 +113,39 @@ const TransactionHistory = ({ account }) => {
 
 ### Parameters
 
-	•	walletAddress: Required. The Ethereum wallet address for which to fetch transactions.
-	•	params: Optional. Additional parameters for the request (e.g., chain or block filters).
+    •	walletAddress: Required. The Ethereum wallet address for which to fetch transactions.
+    •	params: Optional. Additional parameters for the request (e.g., chain or block filters).
 
 ### Returns
 
-	•	data: Contains the transaction data for the current page.
-	•	isLoading: A boolean indicating whether the request is in progress.
-	•	error: Contains any error that occurred during the request.
-	•	nextPage: Function to fetch the next page of transactions.
-	•	previousPage: Function to fetch the previous page of transactions.
-	•	currentPage: The current page number (0-based index).
+    •	data: Contains the transaction data for the current page.
+    •	isLoading: A boolean indicating whether the request is in progress.
+    •	error: Contains any error that occurred during the request.
+    •	nextPage: Function to fetch the next page of transactions.
+    •	previousPage: Function to fetch the previous page of transactions.
+    •	currentPage: The current page number (0-based index).
 
 ### Error Handling
 
 Both hooks return an error object that you can use to handle and display errors.
 
-```javascript 
+```javascript
 if (error) {
   console.error("Error fetching data:", error.message);
   return <p>Error: {error.message}</p>;
 }
-``` 
+```
 
 # Development
+
 Please use node v20 for development.
 
 # Deploying
+
 If you have the power to deploy, you can run the following commands to deploy the package to the npm registry:
 
 First tag a new version of the package:
-*note you can also use `minor` or `major` instead of `patch` to bump the version number accordingly*
+_note you can also use `minor` or `major` instead of `patch` to bump the version number accordingly_
 
 ```bash
 npm version patch

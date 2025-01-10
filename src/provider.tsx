@@ -4,7 +4,7 @@ interface DuneContextType {
   duneApiKey: string;
 }
 
-const DuneContext = createContext<DuneContextType>({duneApiKey: ""})
+const DuneContext = createContext<DuneContextType>({ duneApiKey: "" });
 
 export const useDuneContext = () => {
   const context = useContext(DuneContext);
@@ -24,10 +24,7 @@ interface DuneProviderProps {
   children: React.ReactNode;
 }
 
-export const DuneProvider= ({
-  duneApiKey,
-  children,
-}: DuneProviderProps) => {
+export const DuneProvider = ({ duneApiKey, children }: DuneProviderProps) => {
   return (
     <DuneContext.Provider value={{ duneApiKey }}>
       {children}

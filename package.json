@@ -13,7 +13,12 @@
     "watch": "rollup -c rollup.config.mjs -w",
     "prepare": "npm run build",
     "clean": "rm -rf node_modules package-lock.json dist",
-    "local-setup": "npm run clean && npm i && npm run build && npm pack"
+    "local-setup": "npm run clean && npm i && npm run build && npm pack",
+    "test:prettier": "prettier --check .",
+    "fix:prettier": "prettier --write ."
+  },
+  "prettier": {
+    "trailingComma": "es5"
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0"
@@ -28,6 +33,7 @@
     "@rollup/plugin-node-resolve": "^15.0.0",
     "@rollup/plugin-typescript": "^11.0.0",
     "@types/react": "18.2.25",
+    "prettier": "^3.4.2",
     "rollup": "^3.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "typescript": "^5.0.0"
