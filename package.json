@@ -15,7 +15,8 @@
     "clean": "rm -rf node_modules package-lock.json dist",
     "local-setup": "npm run clean && npm i && npm run build && npm pack",
     "test:prettier": "prettier --check .",
-    "fix:prettier": "prettier --write ."
+    "fix:prettier": "prettier --write .",
+    "test": "vitest"
   },
   "prettier": {
     "trailingComma": "es5"
@@ -32,11 +33,18 @@
     "@rollup/plugin-commonjs": "^24.0.0",
     "@rollup/plugin-node-resolve": "^15.0.0",
     "@rollup/plugin-typescript": "^11.0.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.10.6",
     "@types/react": "18.2.25",
+    "dotenv": "^16.4.7",
+    "jsdom": "^26.0.0",
     "prettier": "^3.4.2",
     "rollup": "^3.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vitest": "^2.1.8"
   },
   "keywords": [
     "react",
@@ -50,6 +58,7 @@
     "url": "git+https://github.com/duneanalytics/hooks.git"
   },
   "dependencies": {
+    "react-dom": "^18.3.1",
     "tslib": "^2.7.0"
   },
   "exports": {
