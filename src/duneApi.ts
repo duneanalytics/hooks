@@ -5,9 +5,9 @@ import {
   TransactionsParams,
 } from "./types";
 
-const BALANCE_API_BASE_URL = "https://api.dune.com/api/echo/v1/balances/evm/";
+const BALANCE_API_BASE_URL = "https://api.dune.com/api/echo/v1/balances/evm";
 const TRANSACTIONS_API_BASE_URL =
-  "https://api.dune.com/api/echo/v1/transactions/evm/";
+  "https://api.dune.com/api/echo/v1/transactions/evm";
 
 const getBalanceQueryParams = (
   params: TokenBalancesParams

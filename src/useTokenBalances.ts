@@ -1,3 +1,4 @@
+import { isAddress } from "viem";
 import { TokenBalancesParams, BalanceData, FetchError } from "./types";
 import { fetchBalances } from "./duneApi";
 import { useState, useEffect } from "react";
@@ -24,7 +25,7 @@ export const useTokenBalances = (
   useEffect(() => {
     if (!apiKey) return;
     const fetchDataAsync = async () => {
-      if (!walletAddress) return;
+      if (!walletAddress || !isAddress(walletAddress)) return;
 
       setState((prevState) => ({ ...prevState, isLoading: true }));
 
