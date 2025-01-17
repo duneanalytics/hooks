@@ -1,11 +1,11 @@
-import { TransactionData, FetchError, TransactionsParams } from "./types";
-import { fetchTransactions } from "./duneApi";
 import { useState, useEffect } from "react";
-import { useDeepMemo } from "./useDeepMemo";
-import { useGetApiKey } from "./provider";
-import { isAddress } from "viem";
 
-export const useTransactions = (
+import { TransactionsParams, TransactionData, FetchError } from "./types";
+import { fetchEvmTransactions } from "./duneApi";
+import { useDeepMemo } from "../useDeepMemo";
+import { useGetApiKey } from "../provider";
+
+export const useEvmTransactions = (
   walletAddress: string,
   params: TransactionsParams = {}
 ) => {
@@ -30,7 +30,7 @@ export const useTransactions = (
 
   // Function to fetch data for a specific page
   const fetchDataAsync = async (offset: string | null) => {
-    if (!apiKey || !walletAddress || !isAddress(walletAddress)) return;
+    if (!walletAddress) return;
 
     setState((prevState) => ({ ...prevState, isLoading: true }));
 
@@ -40,7 +40,8 @@ export const useTransactions = (
         ...memoizedParams,
         offset: offset ?? undefined,
       };
-      const result = await fetchTransactions(
+
+      const result = await fetchEvmTransactions(
         walletAddress,
         updatedParams,
         apiKey
@@ -101,3 +102,6 @@ export const useTransactions = (
     previousPage,
   };
 };
+
+/** @deprecated */
+export const useTransactions = useEvmTransactions;

@@ -5,22 +5,17 @@ import {
   TransactionsParams,
 } from "./types";
 
-const BALANCE_API_BASE_URL = "https://api.dune.com/api/echo/v1/balances/evm";
+const BALANCE_API_BASE_URL = "https://api.dune.com/api/echo/beta/balances/svm/";
 const TRANSACTIONS_API_BASE_URL =
-  "https://api.dune.com/api/echo/v1/transactions/evm";
+  "https://api.dune.com/api/echo/beta/transactions/svm/";
 
 const getBalanceQueryParams = (
   params: TokenBalancesParams
 ): URLSearchParams => {
   const queryParams = new URLSearchParams();
-  if (params.allChains) queryParams.append("all_chains", "true");
-  if (params.chainIds) queryParams.append("chain_ids", params.chainIds);
-  if (params.excludeSpamTokens)
-    queryParams.append("exclude_spam_tokens", "true");
-  if (params.filters) queryParams.append("filters", params.filters);
+  if (params.chains) queryParams.append("chains", params.chains);
   if (params.offset) queryParams.append("offset", params.offset.toString());
   if (params.limit) queryParams.append("limit", params.limit.toString());
-  if (params.metadata) queryParams.append("metadata", "logo,url");
   return queryParams;
 };
 
@@ -28,16 +23,12 @@ const getTransactionsQueryParams = (
   params: TransactionsParams
 ): URLSearchParams => {
   const queryParams = new URLSearchParams();
-  if (params.chainIds) queryParams.append("chain_ids", params.chainIds);
   if (params.offset) queryParams.append("offset", params.offset.toString());
   if (params.limit) queryParams.append("limit", params.limit.toString());
-  if (params.method_id) queryParams.append("method_id", params.method_id);
-  if (params.to) queryParams.append("to", params.to);
-  if (params.decode) queryParams.append("decode", params.decode.toString());
   return queryParams;
 };
 
-export async function fetchBalances(
+export async function fetchSvmBalances(
   walletAddress: string,
   params: TokenBalancesParams,
   duneApiKey: string
@@ -59,7 +50,7 @@ export async function fetchBalances(
   return response.json();
 }
 
-export async function fetchTransactions(
+export async function fetchSvmTransactions(
   walletAddress: string,
   params: TransactionsParams,
   duneApiKey: string
