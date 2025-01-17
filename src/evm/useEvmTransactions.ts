@@ -4,6 +4,7 @@ import { TransactionsParams, TransactionData, FetchError } from "./types";
 import { fetchEvmTransactions } from "./duneApi";
 import { useDeepMemo } from "../useDeepMemo";
 import { useGetApiKey } from "../provider";
+import { isAddress } from "viem";
 
 export const useEvmTransactions = (
   walletAddress: string,
@@ -30,7 +31,7 @@ export const useEvmTransactions = (
 
   // Function to fetch data for a specific page
   const fetchDataAsync = async (offset: string | null) => {
-    if (!walletAddress) return;
+    if (!apiKey || !walletAddress || !isAddress(walletAddress)) return;
 
     setState((prevState) => ({ ...prevState, isLoading: true }));
 
