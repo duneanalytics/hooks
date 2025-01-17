@@ -7,7 +7,7 @@ import { useGetApiKey } from "../provider";
 
 export const useSvmTransactions = (
   walletAddress: string,
-  params: TransactionsParams
+  params: TransactionsParams = {}
 ) => {
   const [state, setState] = useState<{
     data: TransactionData | null;

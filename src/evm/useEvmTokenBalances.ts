@@ -7,7 +7,7 @@ import { useGetApiKey } from "../provider";
 
 export const useEvmTokenBalances = (
   walletAddress: string,
-  params: TokenBalancesParams
+  params: TokenBalancesParams = {}
 ) => {
   const [state, setState] = useState<{
     data: BalanceData | null;
