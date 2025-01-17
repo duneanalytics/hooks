@@ -4,6 +4,7 @@ import { TokenBalancesParams, BalanceData, FetchError } from "./types";
 import { fetchEvmBalances } from "./duneApi";
 import { useDeepMemo } from "../useDeepMemo";
 import { useGetApiKey } from "../provider";
+import { isAddress } from "viem";
 
 export const useEvmTokenBalances = (
   walletAddress: string,
@@ -25,7 +26,7 @@ export const useEvmTokenBalances = (
   useEffect(() => {
     if (!apiKey) return;
     const fetchDataAsync = async () => {
-      if (!walletAddress) return;
+      if (!walletAddress || !isAddress(walletAddress)) return;
 
       setState((prevState) => ({ ...prevState, isLoading: true }));
 
