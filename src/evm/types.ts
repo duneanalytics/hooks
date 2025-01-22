@@ -14,6 +14,7 @@ export type BalanceData = {
   request_time: string;
   response_time: string;
   wallet_address: string;
+  next_offset?: string | null;
   balances: TokenBalance[];
 };
 
