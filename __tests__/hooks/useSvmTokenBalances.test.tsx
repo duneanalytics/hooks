@@ -1,16 +1,16 @@
 import React from "react";
 import { renderHook, waitFor } from "@testing-library/react";
 import { DuneProvider } from "../../src/provider";
-import { useTokenBalances } from "../../src/useTokenBalances";
-import { fetchBalances } from "../../src/duneApi";
+import { useSvmTokenBalances } from "../../src/svm/useSvmTokenBalances";
+import { fetchSvmBalances } from "../../src/svm/duneApi";
 import { vi } from "vitest";
 
 // Mock the Dune API
-vi.mock("../../src/duneApi", () => ({
-  fetchBalances: vi.fn(),
+vi.mock("../../src/svm/duneApi", () => ({
+  fetchSvmBalances: vi.fn(),
 }));
 
-const mockFetchBalances = fetchBalances as jest.Mock;
+const mockFetchSvmBalances = fetchSvmBalances as jest.Mock;
 
 // A wrapper for the hook that provides the required context
 const wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -22,16 +22,6 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe("useTokenBalances", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  it("should return null if the wallet address is not a valid address", () => {
-    const { result } = renderHook(() => useTokenBalances("0x123"), { wrapper });
-
-    expect(result.current).toEqual({
-      data: null,
-      error: null,
-      isLoading: false,
-    });
   });
 
   it("should fetch token balances successfully", async () => {
@@ -54,56 +44,64 @@ describe("useTokenBalances", () => {
         },
       ],
     };
-    mockFetchBalances.mockResolvedValueOnce(mockResponse);
 
-    const { result } = renderHook(() => useTokenBalances(walletAddress), {
-      wrapper,
-    });
+    mockFetchSvmBalances.mockResolvedValueOnce(mockResponse);
+
+    const { result: svmResult } = renderHook(
+      () => useSvmTokenBalances(walletAddress),
+      {
+        wrapper,
+      }
+    );
 
     // Initially, `isLoading` should be true
-    expect(result.current.isLoading).toBe(true);
+    expect(svmResult.current.isLoading).toBe(true);
 
     // Wait for the hook to update
     await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
+      expect(svmResult.current.isLoading).toBe(false);
     });
 
-    expect(mockFetchBalances).toHaveBeenCalledWith(
+    expect(mockFetchSvmBalances).toHaveBeenCalledWith(
       walletAddress,
       {},
       process.env.DUNE_API_KEY
     );
-    expect(result.current.isLoading).toBe(false);
-    expect(result.current.error).toBeNull();
-    expect(result.current.data).toEqual(mockResponse);
+    expect(svmResult.current.isLoading).toBe(false);
+    expect(svmResult.current.error).toBeNull();
+    expect(svmResult.current.data).toEqual(mockResponse);
   });
 
   it("should handle errors when fetching token balances", async () => {
     const walletAddress = "0x1234567890abcdef1234567890abcdef12345678";
 
     const mockError = new Error("Failed to fetch token balances");
-    mockFetchBalances.mockRejectedValueOnce(mockError);
 
-    const { result } = renderHook(() => useTokenBalances(walletAddress), {
-      wrapper,
-    });
+    mockFetchSvmBalances.mockRejectedValueOnce(mockError);
+
+    const { result: svmResult } = renderHook(
+      () => useSvmTokenBalances(walletAddress),
+      {
+        wrapper,
+      }
+    );
 
     // Initially, `isLoading` should be true
-    expect(result.current.isLoading).toBe(true);
+    expect(svmResult.current.isLoading).toBe(true);
 
     // Wait for the hook to update
     await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
+      expect(svmResult.current.isLoading).toBe(false);
     });
 
-    expect(mockFetchBalances).toHaveBeenCalledWith(
+    expect(mockFetchSvmBalances).toHaveBeenCalledWith(
       walletAddress,
       {},
       process.env.DUNE_API_KEY
     );
-    expect(result.current.isLoading).toBe(false);
-    expect(result.current.error).toEqual(mockError);
-    expect(result.current.data).toBeNull();
+    expect(svmResult.current.isLoading).toBe(false);
+    expect(svmResult.current.error).toEqual(mockError);
+    expect(svmResult.current.data).toBeNull();
   });
 
   it("should not fetch data if the API key is missing", () => {
@@ -113,12 +111,15 @@ describe("useTokenBalances", () => {
       <DuneProvider duneApiKey="">{children}</DuneProvider>
     );
 
-    const { result } = renderHook(() => useTokenBalances(walletAddress), {
-      wrapper: localWrapper,
-    });
+    const { result: svmResult } = renderHook(
+      () => useSvmTokenBalances(walletAddress),
+      {
+        wrapper: localWrapper,
+      }
+    );
 
-    expect(mockFetchBalances).not.toHaveBeenCalled();
-    expect(result.current).toEqual({
+    expect(mockFetchSvmBalances).not.toHaveBeenCalled();
+    expect(svmResult.current).toEqual({
       data: null,
       error: null,
       isLoading: false,
@@ -126,10 +127,12 @@ describe("useTokenBalances", () => {
   });
 
   it("should not fetch data if the wallet address is missing", () => {
-    const { result } = renderHook(() => useTokenBalances(""), { wrapper });
+    const { result: svmResult } = renderHook(() => useSvmTokenBalances(""), {
+      wrapper,
+    });
 
-    expect(mockFetchBalances).not.toHaveBeenCalled();
-    expect(result.current).toEqual({
+    expect(mockFetchSvmBalances).not.toHaveBeenCalled();
+    expect(svmResult.current).toEqual({
       data: null,
       error: null,
       isLoading: false,

@@ -30,7 +30,7 @@ export const useSvmTransactions = (
 
   // Function to fetch data for a specific page
   const fetchDataAsync = async (offset: string | null) => {
-    if (!walletAddress) return;
+    if (!apiKey || !walletAddress) return;
 
     setState((prevState) => ({ ...prevState, isLoading: true }));
 
