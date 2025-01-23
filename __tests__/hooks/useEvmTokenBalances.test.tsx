@@ -78,7 +78,8 @@ describe("useTokenBalances", () => {
     expect(mockFetchEvmBalances).toHaveBeenCalledWith(
       walletAddress,
       {},
-      process.env.DUNE_API_KEY
+      process.env.DUNE_API_KEY,
+      "https://api.dune.com"
     );
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBeNull();
@@ -106,7 +107,8 @@ describe("useTokenBalances", () => {
     expect(mockFetchEvmBalances).toHaveBeenCalledWith(
       walletAddress,
       {},
-      process.env.DUNE_API_KEY
+      process.env.DUNE_API_KEY,
+      "https://api.dune.com"
     );
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toEqual(mockError);
