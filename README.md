@@ -40,19 +40,29 @@ Fetches token balances for a specific wallet address.
 import { useTokenBalances } from "@duneanalytics/hooks";
 
 const MyComponent = ({ account }) => {
-  const { data, isLoading, error } = useTokenBalances(account.address, {});
+  const { data, isLoading, error, nextPage, previousPage, currentPage } =
+    useTokenBalances(account.address, {});
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <ul>
-      {data.balances.map((balance) => (
-        <li key={balance.tokenSymbol}>
-          {balance.tokenSymbol}: {balance.amount}
-        </li>
-      ))}
-    </ul>
+    <div>
+      <ul>
+        {data.balances.map((balance) => (
+          <li key={balance.tokenSymbol}>
+            {balance.tokenSymbol}: {balance.amount}
+          </li>
+        ))}
+      </ul>
+      <button onClick={previousPage} disabled={currentPage === 0}>
+        Previous Page
+      </button>
+      <button onClick={nextPage} disabled={!data.next_offset}>
+        Next Page
+      </button>
+      <p>Current Page: {currentPage + 1}</p>
+    </div>
   );
 };
 ```
@@ -149,6 +159,12 @@ _note you can also use `minor` or `major` instead of `patch` to bump the version
 
 ```bash
 npm version patch
+```
+
+When you make any changes, please make sure that the tests pass.
+
+```bash
+npm test
 ```
 
 Then run the following commands to deploy the package to the npm registry:
