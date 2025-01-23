@@ -16,5 +16,8 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: "Test: prettier"
+      - name: "Test: Prettier"
         run: npm run test:prettier
+
+      - name: "Test: Vitest"
+        run: npm test

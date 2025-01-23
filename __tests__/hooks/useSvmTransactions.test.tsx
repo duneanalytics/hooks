@@ -1,16 +1,16 @@
 import React from "react";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { DuneProvider } from "../../src/provider";
-import { useTransactions } from "../../src/useTransactions";
-import { fetchTransactions } from "../../src/duneApi";
+import { useSvmTransactions } from "../../src/svm/useSvmTransactions";
+import { fetchSvmTransactions } from "../../src/svm/duneApi";
 import { vi } from "vitest";
 
 // Mock the Dune API
-vi.mock("../../src/duneApi", () => ({
-  fetchTransactions: vi.fn(),
+vi.mock("../../src/svm/duneApi", () => ({
+  fetchSvmTransactions: vi.fn(),
 }));
 
-const mockFetchTransactions = fetchTransactions as jest.Mock;
+const mockFetchSvmTransactions = fetchSvmTransactions as jest.Mock;
 
 // A wrapper for the hook that provides the required context
 const wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -22,21 +22,6 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe("useTransactions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  it("should return null if the wallet address is not a valid address", () => {
-    const { result } = renderHook(() => useTransactions("0x123"), { wrapper });
-
-    expect(result.current).toEqual({
-      data: null,
-      error: null,
-      isLoading: false,
-      nextOffset: null,
-      offsets: [],
-      currentPage: 0,
-      nextPage: expect.any(Function),
-      previousPage: expect.any(Function),
-    });
   });
 
   it("should fetch transactions successfully", async () => {
@@ -72,55 +57,62 @@ describe("useTransactions", () => {
       ],
       next_offset: "offset1",
     };
-    mockFetchTransactions.mockResolvedValueOnce(mockResponse);
 
-    const { result } = renderHook(() => useTransactions(walletAddress), {
-      wrapper,
-    });
+    mockFetchSvmTransactions.mockResolvedValueOnce(mockResponse);
+
+    const { result: svmResult } = renderHook(
+      () => useSvmTransactions(walletAddress),
+      {
+        wrapper,
+      }
+    );
 
     // Initially, `isLoading` should be true
-    expect(result.current.isLoading).toBe(true);
+    expect(svmResult.current.isLoading).toBe(true);
 
     // Wait for the hook to update
     await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
+      expect(svmResult.current.isLoading).toBe(false);
     });
 
-    expect(mockFetchTransactions).toHaveBeenCalledWith(
+    expect(mockFetchSvmTransactions).toHaveBeenCalledWith(
       walletAddress,
       { offset: undefined },
       process.env.DUNE_API_KEY
     );
-    expect(result.current.data).toEqual(mockResponse);
-    expect(result.current.nextOffset).toBe("offset1");
-    expect(result.current.error).toBeNull();
+    expect(svmResult.current.data).toEqual(mockResponse);
+    expect(svmResult.current.nextOffset).toBe("offset1");
+    expect(svmResult.current.error).toBeNull();
   });
 
   it("should handle errors when fetching transactions", async () => {
     const walletAddress = "0x1234567890abcdef1234567890abcdef12345678";
 
     const mockError = new Error("Failed to fetch transactions");
-    mockFetchTransactions.mockRejectedValueOnce(mockError);
+    mockFetchSvmTransactions.mockRejectedValueOnce(mockError);
 
-    const { result } = renderHook(() => useTransactions(walletAddress), {
-      wrapper,
-    });
+    const { result: svmResult } = renderHook(
+      () => useSvmTransactions(walletAddress),
+      {
+        wrapper,
+      }
+    );
 
     // Initially, `isLoading` should be true
-    expect(result.current.isLoading).toBe(true);
+    expect(svmResult.current.isLoading).toBe(true);
 
     // Wait for the hook to update
     await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
+      expect(svmResult.current.isLoading).toBe(false);
     });
 
-    expect(mockFetchTransactions).toHaveBeenCalledWith(
+    expect(mockFetchSvmTransactions).toHaveBeenCalledWith(
       walletAddress,
       { offset: undefined },
       process.env.DUNE_API_KEY
     );
-    expect(result.current.error).toEqual(mockError);
-    expect(result.current.data).toBeNull();
+    expect(svmResult.current.error).toEqual(mockError);
+    expect(svmResult.current.data).toBeNull();
   });
 
   it("should handle pagination: next and previous pages", async () => {
@@ -139,48 +131,51 @@ describe("useTransactions", () => {
       next_offset: "offset2",
     };
 
-    mockFetchTransactions
+    mockFetchSvmTransactions
       .mockResolvedValueOnce(page1Response)
       .mockResolvedValueOnce(page2Response)
       .mockResolvedValueOnce(page1Response);
 
-    const { result } = renderHook(() => useTransactions(walletAddress), {
-      wrapper,
-    });
+    const { result: svmResult } = renderHook(
+      () => useSvmTransactions(walletAddress),
+      {
+        wrapper,
+      }
+    );
 
     // Wait for the first page
     await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
+      expect(svmResult.current.isLoading).toBe(false);
     });
 
-    expect(result.current.data).toEqual(page1Response);
-    expect(result.current.currentPage).toBe(0);
+    expect(svmResult.current.data).toEqual(page1Response);
+    expect(svmResult.current.currentPage).toBe(0);
 
     // Fetch the next page
     act(() => {
-      result.current.nextPage();
+      svmResult.current.nextPage();
     });
 
     // Wait for the second page
     await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
+      expect(svmResult.current.isLoading).toBe(false);
     });
 
-    expect(result.current.data).toEqual(page2Response);
-    expect(result.current.currentPage).toBe(1);
+    expect(svmResult.current.data).toEqual(page2Response);
+    expect(svmResult.current.currentPage).toBe(1);
 
     // Fetch the previous page
     act(() => {
-      result.current.previousPage();
+      svmResult.current.previousPage();
     });
 
     // Wait for the first page again
     await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
+      expect(svmResult.current.isLoading).toBe(false);
     });
 
-    expect(result.current.data).toEqual(page1Response);
-    expect(result.current.currentPage).toBe(0);
+    expect(svmResult.current.data).toEqual(page1Response);
+    expect(svmResult.current.currentPage).toBe(0);
   });
 
   it("should not fetch data if the API key is missing", () => {
@@ -190,12 +185,15 @@ describe("useTransactions", () => {
       <DuneProvider duneApiKey="">{children}</DuneProvider>
     );
 
-    const { result } = renderHook(() => useTransactions(walletAddress), {
-      wrapper: localWrapper,
-    });
+    const { result: svmResult } = renderHook(
+      () => useSvmTransactions(walletAddress),
+      {
+        wrapper: localWrapper,
+      }
+    );
 
-    expect(mockFetchTransactions).not.toHaveBeenCalled();
-    expect(result.current).toEqual({
+    expect(mockFetchSvmTransactions).not.toHaveBeenCalled();
+    expect(svmResult.current).toEqual({
       data: null,
       error: null,
       isLoading: false,
@@ -208,10 +206,12 @@ describe("useTransactions", () => {
   });
 
   it("should not fetch data if the wallet address is missing", () => {
-    const { result } = renderHook(() => useTransactions(""), { wrapper });
+    const { result: svmResult } = renderHook(() => useSvmTransactions(""), {
+      wrapper,
+    });
 
-    expect(mockFetchTransactions).not.toHaveBeenCalled();
-    expect(result.current).toEqual({
+    expect(mockFetchSvmTransactions).not.toHaveBeenCalled();
+    expect(svmResult.current).toEqual({
       data: null,
       error: null,
       isLoading: false,
