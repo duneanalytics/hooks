@@ -16,6 +16,13 @@ export type BalanceData = {
   wallet_address: string;
   balances: TokenBalance[];
   next_offset?: string | null;
+  errors?: {
+    token_errors?: {
+      address: string;
+      chain_id: number;
+      description?: string;
+    }[];
+  };
 };
 
 export type FetchError = Error & {
