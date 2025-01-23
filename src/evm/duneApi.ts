@@ -5,9 +5,8 @@ import {
   TransactionsParams,
 } from "./types";
 
-const BALANCE_API_BASE_URL = "https://api.dune.com/api/echo/v1/balances/evm";
-const TRANSACTIONS_API_BASE_URL =
-  "https://api.dune.com/api/echo/v1/transactions/evm";
+const BALANCES_PREFIX = "api/echo/v1/balances/evm";
+const TRANSACTIONS_PREFIX = "api/echo/v1/transactions/evm";
 
 const getBalanceQueryParams = (
   params: TokenBalancesParams
@@ -40,10 +39,11 @@ const getTransactionsQueryParams = (
 export async function fetchEvmBalances(
   walletAddress: string,
   params: TokenBalancesParams,
-  duneApiKey: string
+  duneApiKey: string,
+  baseUrl: string
 ): Promise<BalanceData> {
   const queryParams = getBalanceQueryParams(params);
-  const apiUrl = `${BALANCE_API_BASE_URL}/${walletAddress}?${queryParams.toString()}`;
+  const apiUrl = `${baseUrl}/${BALANCES_PREFIX}/${walletAddress}?${queryParams.toString()}`;
 
   const response = await fetch(apiUrl, {
     method: "GET",
@@ -65,10 +65,11 @@ export const fetchBalances = fetchEvmBalances;
 export async function fetchEvmTransactions(
   walletAddress: string,
   params: TransactionsParams,
-  duneApiKey: string
+  duneApiKey: string,
+  baseUrl: string
 ): Promise<TransactionData> {
   const queryParams = getTransactionsQueryParams(params);
-  const apiUrl = `${TRANSACTIONS_API_BASE_URL}/${walletAddress}?${queryParams.toString()}`;
+  const apiUrl = `${baseUrl}/${TRANSACTIONS_PREFIX}/${walletAddress}?${queryParams.toString()}`;
 
   const response = await fetch(apiUrl, {
     method: "GET",

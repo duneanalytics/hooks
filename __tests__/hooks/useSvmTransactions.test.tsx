@@ -78,7 +78,8 @@ describe("useTransactions", () => {
     expect(mockFetchSvmTransactions).toHaveBeenCalledWith(
       walletAddress,
       { offset: undefined },
-      process.env.DUNE_API_KEY
+      process.env.DUNE_API_KEY,
+      "https://api.dune.com"
     );
     expect(svmResult.current.data).toEqual(mockResponse);
     expect(svmResult.current.nextOffset).toBe("offset1");
@@ -109,7 +110,8 @@ describe("useTransactions", () => {
     expect(mockFetchSvmTransactions).toHaveBeenCalledWith(
       walletAddress,
       { offset: undefined },
-      process.env.DUNE_API_KEY
+      process.env.DUNE_API_KEY,
+      "https://api.dune.com"
     );
     expect(svmResult.current.error).toEqual(mockError);
     expect(svmResult.current.data).toBeNull();

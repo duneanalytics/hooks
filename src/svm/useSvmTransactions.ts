@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { TransactionsParams, TransactionData, FetchError } from "./types";
 import { fetchSvmTransactions } from "./duneApi";
 import { useDeepMemo } from "../useDeepMemo";
-import { useGetApiKey } from "../provider";
+import { useGetApiKey, useGetBaseUrl } from "../provider";
 
 export const useSvmTransactions = (
   walletAddress: string,
@@ -27,6 +27,7 @@ export const useSvmTransactions = (
 
   const memoizedParams = useDeepMemo(() => params, [params]);
   const apiKey = useGetApiKey();
+  const baseUrl = useGetBaseUrl();
 
   // Function to fetch data for a specific page
   const fetchDataAsync = async (offset: string | null) => {
@@ -44,7 +45,8 @@ export const useSvmTransactions = (
       const result = await fetchSvmTransactions(
         walletAddress,
         updatedParams,
-        apiKey
+        apiKey,
+        baseUrl
       );
 
       setState((prevState) => ({
