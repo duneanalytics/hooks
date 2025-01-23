@@ -16,6 +16,13 @@ export type BalanceData = {
   wallet_address: string;
   next_offset?: string | null;
   balances: TokenBalance[];
+  errors?: {
+    token_errors?: {
+      address: string;
+      chain_id: number;
+      description?: string;
+    }[];
+  };
 };
 
 export type FetchError = Error & {
@@ -53,17 +60,29 @@ export type TransactionsParams = {
   /** Maximum number of transactions to return */
   limit?: number | null;
 
+  /** Return only transactions before this block time */
+  block_time?: number | null;
+
   /** Comma separated list of chain ids to get transactions for */
   chainIds?: string | null;
-
-  /** Return only transactions with this method id */
-  method_id?: string | null;
 
   /** Filter transactions to a given address */
   to?: string | null;
 
+  /** Return only transactions with this method id */
+  method_id?: string | null;
+
   /** Return abi decoded transactions and logs */
   decode?: boolean | null;
+
+  /** Return only transactions with this address in logs */
+  log_address?: string | null;
+
+  /** Return only transactions with this topic0 */
+  topic0?: string | null;
+
+  /** Return only transactions with this block number */
+  min_block_number?: number | null;
 };
 
 export type UseTokenBalancesConfig = {
@@ -95,9 +114,6 @@ export type Transaction = {
 };
 
 export type TransactionData = {
-  request_time: string;
-  response_time: string;
-  wallet_address: string;
   transactions: Transaction[];
   next_offset?: string | null;
 };
