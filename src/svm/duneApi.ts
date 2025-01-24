@@ -1,3 +1,4 @@
+import { removeTrailingSlash } from "../utils";
 import {
   BalanceData,
   TokenBalancesParams,
@@ -43,6 +44,11 @@ export async function fetchSvmBalances(
   proxyUrl: string | undefined
 ): Promise<BalanceData> {
   const queryParams = getBalanceQueryParams(params);
+
+  if (proxyUrl) {
+    proxyUrl = removeTrailingSlash(proxyUrl);
+  }
+
   const apiUrl = `${proxyUrl || BASE_URL}/${BALANCES_PREFIX}/${walletAddress}?${queryParams.toString()}`;
 
   const response = await fetch(apiUrl, {
