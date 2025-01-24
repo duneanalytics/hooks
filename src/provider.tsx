@@ -1,13 +1,12 @@
 import React, { createContext, useContext } from "react";
 
 interface DuneContextType {
-  duneApiKey: string;
-  baseUrl?: string;
+  duneApiKey?: string;
+  proxyUrl?: string;
 }
 
 const DuneContext = createContext<DuneContextType>({
   duneApiKey: "",
-  baseUrl: "",
 });
 
 export const useDuneContext = () => {
@@ -23,28 +22,22 @@ export const useGetApiKey = () => {
   return context.duneApiKey;
 };
 
-export const useGetBaseUrl = () => {
+export const useGetProxyUrl = () => {
   const context = useDuneContext();
-  if (!context.baseUrl) {
-    return "https://api.dune.com";
-  }
-  return context.baseUrl;
+  return context.proxyUrl;
 };
 
-interface DuneProviderProps {
-  duneApiKey: string;
-  baseUrl?: string;
-  children: React.ReactNode;
-}
+type DuneProviderProps =
+  | { duneApiKey: string; proxyUrl?: never; children: React.ReactNode }
+  | { duneApiKey?: never; proxyUrl: string; children: React.ReactNode };
 
-export const DuneProvider = ({
-  duneApiKey,
-  baseUrl,
-  children,
-}: DuneProviderProps) => {
+export const DuneProvider = (props: DuneProviderProps) => {
+  const duneApiKey = "duneApiKey" in props ? props.duneApiKey : undefined;
+  const proxyUrl = "proxyUrl" in props ? props.proxyUrl : undefined;
+
   return (
-    <DuneContext.Provider value={{ duneApiKey, baseUrl }}>
-      {children}
+    <DuneContext.Provider value={{ duneApiKey, proxyUrl }}>
+      {props.children}
     </DuneContext.Provider>
   );
 };

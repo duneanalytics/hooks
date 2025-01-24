@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { TokenBalancesParams, BalanceData, FetchError } from "./types";
 import { fetchSvmBalances } from "./duneApi";
 import { useDeepMemo } from "../useDeepMemo";
-import { useGetApiKey, useGetBaseUrl } from "../provider";
+import { useGetApiKey, useGetProxyUrl } from "../provider";
 
 export const useSvmTokenBalances = (
   walletAddress: string,
@@ -27,11 +27,33 @@ export const useSvmTokenBalances = (
 
   const memoizedParams = useDeepMemo(() => params, params);
   const apiKey = useGetApiKey();
-  const baseUrl = useGetBaseUrl();
+  const proxyUrl = useGetProxyUrl();
 
   // Function to fetch data for a specific page
   const fetchDataAsync = async (offset: string | null) => {
-    if (!apiKey || !walletAddress) return;
+    if (!apiKey && !proxyUrl) {
+      setState({
+        data: null,
+        error: new Error("One of duneApiKey or proxyUrl must be provided"),
+        isLoading: false,
+        nextOffset: null,
+        offsets: [],
+        currentPage: 0,
+      });
+      return;
+    }
+
+    if (!walletAddress) {
+      setState({
+        data: null,
+        error: new Error("walletAddress must be a valid address"),
+        isLoading: false,
+        nextOffset: null,
+        offsets: [],
+        currentPage: 0,
+      });
+      return;
+    }
 
     setState((prevState) => ({ ...prevState, isLoading: true }));
 
@@ -46,7 +68,7 @@ export const useSvmTokenBalances = (
         walletAddress,
         updatedParams,
         apiKey,
-        baseUrl
+        proxyUrl
       );
 
       setState((prevState) => ({

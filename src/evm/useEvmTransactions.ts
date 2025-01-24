@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { TransactionsParams, TransactionData, FetchError } from "./types";
 import { fetchEvmTransactions } from "./duneApi";
 import { useDeepMemo } from "../useDeepMemo";
-import { useGetApiKey, useGetBaseUrl } from "../provider";
+import { useGetApiKey, useGetProxyUrl } from "../provider";
 import { isAddress } from "viem";
 
 export const useEvmTransactions = (
@@ -28,11 +28,33 @@ export const useEvmTransactions = (
 
   const memoizedParams = useDeepMemo(() => params, [params]);
   const apiKey = useGetApiKey();
-  const baseUrl = useGetBaseUrl();
+  const proxyUrl = useGetProxyUrl();
 
   // Function to fetch data for a specific page
   const fetchDataAsync = async (offset: string | null) => {
-    if (!apiKey || !walletAddress || !isAddress(walletAddress)) return;
+    if (!apiKey && !proxyUrl) {
+      setState({
+        data: null,
+        error: new Error("One of duneApiKey or proxyUrl must be provided"),
+        isLoading: false,
+        nextOffset: null,
+        offsets: [],
+        currentPage: 0,
+      });
+      return;
+    }
+
+    if (!walletAddress || !isAddress(walletAddress)) {
+      setState({
+        data: null,
+        error: new Error("walletAddress must be a valid address"),
+        isLoading: false,
+        nextOffset: null,
+        offsets: [],
+        currentPage: 0,
+      });
+      return;
+    }
 
     setState((prevState) => ({ ...prevState, isLoading: true }));
 
@@ -47,7 +69,7 @@ export const useEvmTransactions = (
         walletAddress,
         updatedParams,
         apiKey,
-        baseUrl
+        proxyUrl
       );
 
       setState((prevState) => ({

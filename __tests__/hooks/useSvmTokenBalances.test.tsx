@@ -66,7 +66,7 @@ describe("useTokenBalances", () => {
       walletAddress,
       {},
       process.env.DUNE_API_KEY,
-      "https://api.dune.com"
+      undefined
     );
     expect(svmResult.current.isLoading).toBe(false);
     expect(svmResult.current.error).toBeNull();
@@ -99,14 +99,14 @@ describe("useTokenBalances", () => {
       walletAddress,
       {},
       process.env.DUNE_API_KEY,
-      "https://api.dune.com"
+      undefined
     );
     expect(svmResult.current.isLoading).toBe(false);
     expect(svmResult.current.error).toEqual(mockError);
     expect(svmResult.current.data).toBeNull();
   });
 
-  it("should not fetch data if the API key is missing", () => {
+  it("should not fetch data if the API key and proxy URL are missing", () => {
     const walletAddress = "0x1234567890abcdef1234567890abcdef12345678";
 
     const localWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -123,7 +123,7 @@ describe("useTokenBalances", () => {
     expect(mockFetchSvmBalances).not.toHaveBeenCalled();
     expect(svmResult.current).toEqual({
       data: null,
-      error: null,
+      error: new Error("One of duneApiKey or proxyUrl must be provided"),
       isLoading: false,
       nextOffset: null,
       offsets: [],
@@ -141,7 +141,7 @@ describe("useTokenBalances", () => {
     expect(mockFetchSvmBalances).not.toHaveBeenCalled();
     expect(svmResult.current).toEqual({
       data: null,
-      error: null,
+      error: new Error("walletAddress must be a valid address"),
       isLoading: false,
       nextOffset: null,
       offsets: [],
