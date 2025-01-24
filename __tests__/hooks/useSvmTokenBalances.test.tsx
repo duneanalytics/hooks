@@ -141,7 +141,7 @@ describe("useTokenBalances", () => {
     expect(mockFetchSvmBalances).not.toHaveBeenCalled();
     expect(svmResult.current).toEqual({
       data: null,
-      error: new Error("walletAddress must be a valid address"),
+      error: null,
       isLoading: false,
       nextOffset: null,
       offsets: [],

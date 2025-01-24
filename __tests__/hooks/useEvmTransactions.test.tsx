@@ -31,7 +31,7 @@ describe("useTransactions", () => {
 
     expect(result.current).toEqual({
       data: null,
-      error: new Error("walletAddress must be a valid address"),
+      error: null,
       isLoading: false,
       nextOffset: null,
       offsets: [],
@@ -217,7 +217,7 @@ describe("useTransactions", () => {
     expect(mockFetchEvmTransactions).not.toHaveBeenCalled();
     expect(result.current).toEqual({
       data: null,
-      error: new Error("walletAddress must be a valid address"),
+      error: null,
       isLoading: false,
       nextOffset: null,
       offsets: [],

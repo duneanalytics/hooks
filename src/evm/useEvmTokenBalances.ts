@@ -44,17 +44,7 @@ export const useEvmTokenBalances = (
       return;
     }
 
-    if (!walletAddress || !isAddress(walletAddress)) {
-      setState({
-        data: null,
-        error: new Error("walletAddress must be a valid address"),
-        isLoading: false,
-        nextOffset: null,
-        offsets: [],
-        currentPage: 0,
-      });
-      return;
-    }
+    if (!walletAddress || !isAddress(walletAddress)) return;
 
     setState((prevState) => ({ ...prevState, isLoading: true }));
 
