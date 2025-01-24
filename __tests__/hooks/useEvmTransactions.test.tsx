@@ -92,7 +92,7 @@ describe("useTransactions", () => {
       walletAddress,
       { offset: undefined },
       process.env.DUNE_API_KEY,
-      "https://api.dune.com"
+      undefined
     );
     expect(result.current.data).toEqual(mockResponse);
     expect(result.current.nextOffset).toBe("offset1");
@@ -121,7 +121,7 @@ describe("useTransactions", () => {
       walletAddress,
       { offset: undefined },
       process.env.DUNE_API_KEY,
-      "https://api.dune.com"
+      undefined
     );
     expect(result.current.error).toEqual(mockError);
     expect(result.current.data).toBeNull();
@@ -187,7 +187,7 @@ describe("useTransactions", () => {
     expect(result.current.currentPage).toBe(0);
   });
 
-  it("should not fetch data if the API key is missing", () => {
+  it("should not fetch data if the API key and proxy URL are missing", () => {
     const walletAddress = "0x1234567890abcdef1234567890abcdef12345678";
 
     const localWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -201,7 +201,7 @@ describe("useTransactions", () => {
     expect(mockFetchEvmTransactions).not.toHaveBeenCalled();
     expect(result.current).toEqual({
       data: null,
-      error: null,
+      error: new Error("One of duneApiKey or proxyUrl must be provided"),
       isLoading: false,
       nextOffset: null,
       offsets: [],

@@ -5,6 +5,7 @@ import {
   TransactionsParams,
 } from "./types";
 
+const BASE_URL = "https://api.dune.com";
 const BALANCES_PREFIX = "api/echo/beta/balances/svm";
 const TRANSACTIONS_PREFIX = "api/echo/beta/transactions/svm";
 
@@ -27,20 +28,26 @@ const getTransactionsQueryParams = (
   return queryParams;
 };
 
+const getHeaders = (duneApiKey: string | undefined) => {
+  return duneApiKey
+    ? {
+        "x-dune-api-key": duneApiKey,
+      }
+    : undefined;
+};
+
 export async function fetchSvmBalances(
   walletAddress: string,
   params: TokenBalancesParams,
-  duneApiKey: string,
-  baseUrl: string
+  duneApiKey: string | undefined,
+  proxyUrl: string | undefined
 ): Promise<BalanceData> {
   const queryParams = getBalanceQueryParams(params);
-  const apiUrl = `${baseUrl}/${BALANCES_PREFIX}/${walletAddress}?${queryParams.toString()}`;
+  const apiUrl = `${proxyUrl || BASE_URL}/${BALANCES_PREFIX}/${walletAddress}?${queryParams.toString()}`;
 
   const response = await fetch(apiUrl, {
     method: "GET",
-    headers: {
-      "x-dune-api-key": duneApiKey,
-    },
+    headers: getHeaders(duneApiKey),
   });
 
   if (!response.ok) {
@@ -53,17 +60,15 @@ export async function fetchSvmBalances(
 export async function fetchSvmTransactions(
   walletAddress: string,
   params: TransactionsParams,
-  duneApiKey: string,
-  baseUrl: string
+  duneApiKey: string | undefined,
+  proxyUrl: string | undefined
 ): Promise<TransactionData> {
   const queryParams = getTransactionsQueryParams(params);
-  const apiUrl = `${baseUrl}/${TRANSACTIONS_PREFIX}/${walletAddress}?${queryParams.toString()}`;
+  const apiUrl = `${proxyUrl || BASE_URL}/${TRANSACTIONS_PREFIX}/${walletAddress}?${queryParams.toString()}`;
 
   const response = await fetch(apiUrl, {
     method: "GET",
-    headers: {
-      "x-dune-api-key": duneApiKey,
-    },
+    headers: getHeaders(duneApiKey),
   });
 
   if (!response.ok) {
