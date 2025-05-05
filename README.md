@@ -176,4 +176,4 @@ npm publish --access public
 
 # License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](https://opensource.org/license/MIT).
