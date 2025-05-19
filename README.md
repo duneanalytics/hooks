@@ -4,7 +4,7 @@ This project integrates with the [Dune's sim APIs](https://sim.dune.com/) to pro
 
 # Prerequisites
 
-Please use Node.js >= 20.0.0 for development.
+Please use Node.js >= v20.9.0 for development.
 
 # Installation
 

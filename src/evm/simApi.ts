@@ -97,4 +97,4 @@ export async function fetchEvmTransactions(
 }
 
 /** @deprecated */
-export const fetchTransactions = fetchEvmTransactions; 
+export const fetchTransactions = fetchEvmTransactions;
