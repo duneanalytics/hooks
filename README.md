@@ -1,6 +1,6 @@
-# React Hooks for sim APIs
+# React Hooks for Sim APIs
 
-This project integrates with the [Dune's sim APIs](https://sim.dune.com/) to provide easy access to token balances and transaction data for given wallets. It uses the `SimProvider` to manage API key authorization and provides convenient React hooks for fetching token balances and paginated transaction data.
+This project integrates with the [Dune's Sim APIs](https://sim.dune.com/) to provide easy access to token balances and transaction data for given wallets. It uses the `SimProvider` to manage API key authorization and provides convenient React hooks for fetching token balances and paginated transaction data.
 
 # Prerequisites
 
@@ -16,7 +16,7 @@ npm install @duneanalytics/hooks
 
 # Provider Setup
 
-To use the sim APIs wrap your application in the `SimProvider` and provide your Sim API key:
+To use the Sim APIs wrap your application in the `SimProvider` and provide your Sim API key:
 
 ```javascript
 import { SimProvider } from "@duneanalytics/hooks";
@@ -30,7 +30,7 @@ const App = () => (
 
 # Props
 
-- simApiKey: Required. The API key to authenticate your requests with sim APIs.
+- simApiKey: Required. The API key to authenticate your requests with Sim APIs.
 
 # Hooks
 
