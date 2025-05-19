@@ -1,12 +1,12 @@
 import React from "react";
 import { renderHook, act, waitFor } from "@testing-library/react";
-import { DuneProvider } from "../../src/provider";
+import { SimProvider } from "../../src/provider";
 import { useSvmTokenBalances } from "../../src/svm/useSvmTokenBalances";
-import { fetchSvmBalances } from "../../src/svm/duneApi";
+import { fetchSvmBalances } from "../../src/svm/simApi";
 import { vi } from "vitest";
 
-// Mock the Dune API
-vi.mock("../../src/svm/duneApi", () => ({
+// Mock the Sim API
+vi.mock("../../src/svm/simApi", () => ({
   fetchSvmBalances: vi.fn(),
 }));
 
@@ -14,9 +14,9 @@ const mockFetchSvmBalances = fetchSvmBalances as jest.Mock;
 
 // A wrapper for the hook that provides the required context
 const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <DuneProvider duneApiKey={process.env.DUNE_API_KEY as string}>
+  <SimProvider simApiKey={process.env.SIM_API_KEY as string}>
     {children}
-  </DuneProvider>
+  </SimProvider>
 );
 
 describe("useTokenBalances", () => {
@@ -65,7 +65,7 @@ describe("useTokenBalances", () => {
     expect(mockFetchSvmBalances).toHaveBeenCalledWith(
       walletAddress,
       {},
-      process.env.DUNE_API_KEY,
+      process.env.SIM_API_KEY,
       undefined
     );
     expect(svmResult.current.isLoading).toBe(false);
@@ -98,7 +98,7 @@ describe("useTokenBalances", () => {
     expect(mockFetchSvmBalances).toHaveBeenCalledWith(
       walletAddress,
       {},
-      process.env.DUNE_API_KEY,
+      process.env.SIM_API_KEY,
       undefined
     );
     expect(svmResult.current.isLoading).toBe(false);
@@ -110,7 +110,7 @@ describe("useTokenBalances", () => {
     const walletAddress = "0x1234567890abcdef1234567890abcdef12345678";
 
     const localWrapper = ({ children }: { children: React.ReactNode }) => (
-      <DuneProvider duneApiKey="">{children}</DuneProvider>
+      <SimProvider simApiKey="">{children}</SimProvider>
     );
 
     const { result: svmResult } = renderHook(
@@ -123,7 +123,7 @@ describe("useTokenBalances", () => {
     expect(mockFetchSvmBalances).not.toHaveBeenCalled();
     expect(svmResult.current).toEqual({
       data: null,
-      error: new Error("One of duneApiKey or proxyUrl must be provided"),
+      error: new Error("One of simApiKey or proxyUrl must be provided"),
       isLoading: false,
       nextOffset: null,
       offsets: [],

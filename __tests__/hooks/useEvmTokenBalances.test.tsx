@@ -1,12 +1,12 @@
 import React from "react";
 import { renderHook, act, waitFor } from "@testing-library/react";
-import { DuneProvider } from "../../src/provider";
+import { SimProvider } from "../../src/provider";
 import { useEvmTokenBalances } from "../../src/evm/useEvmTokenBalances";
-import { fetchEvmBalances } from "../../src/evm/duneApi";
+import { fetchEvmBalances } from "../../src/evm/simApi";
 import { vi } from "vitest";
 
-// Mock the Dune API
-vi.mock("../../src/evm/duneApi", () => ({
+// Mock the Sim API
+vi.mock("../../src/evm/simApi", () => ({
   fetchEvmBalances: vi.fn(),
 }));
 
@@ -14,9 +14,9 @@ const mockFetchEvmBalances = fetchEvmBalances as jest.Mock;
 
 // A wrapper for the hook that provides the required context
 const wrapper = ({ children }: { children: React.ReactNode }) => (
-  <DuneProvider duneApiKey={process.env.DUNE_API_KEY as string}>
+  <SimProvider simApiKey={process.env.SIM_API_KEY as string}>
     {children}
-  </DuneProvider>
+  </SimProvider>
 );
 
 describe("useTokenBalances", () => {
@@ -78,7 +78,7 @@ describe("useTokenBalances", () => {
     expect(mockFetchEvmBalances).toHaveBeenCalledWith(
       walletAddress,
       {},
-      process.env.DUNE_API_KEY,
+      process.env.SIM_API_KEY,
       undefined
     );
     expect(result.current.isLoading).toBe(false);
@@ -107,7 +107,7 @@ describe("useTokenBalances", () => {
     expect(mockFetchEvmBalances).toHaveBeenCalledWith(
       walletAddress,
       {},
-      process.env.DUNE_API_KEY,
+      process.env.SIM_API_KEY,
       undefined
     );
     expect(result.current.isLoading).toBe(false);
@@ -119,7 +119,7 @@ describe("useTokenBalances", () => {
     const walletAddress = "0x1234567890abcdef1234567890abcdef12345678";
 
     const localWrapper = ({ children }: { children: React.ReactNode }) => (
-      <DuneProvider duneApiKey="">{children}</DuneProvider>
+      <SimProvider simApiKey="">{children}</SimProvider>
     );
 
     const { result } = renderHook(() => useEvmTokenBalances(walletAddress), {
@@ -129,7 +129,7 @@ describe("useTokenBalances", () => {
     expect(mockFetchEvmBalances).not.toHaveBeenCalled();
     expect(result.current).toEqual({
       data: null,
-      error: new Error("One of duneApiKey or proxyUrl must be provided"),
+      error: new Error("One of simApiKey or proxyUrl must be provided"),
       isLoading: false,
       nextOffset: null,
       offsets: [],

@@ -7,21 +7,16 @@ import {
 } from "./types";
 
 const BASE_URL = "https://api.dune.com";
-const BALANCES_PREFIX = "api/echo/v1/balances/evm";
-const TRANSACTIONS_PREFIX = "api/echo/v1/transactions/evm";
+const BALANCES_PREFIX = "/beta/svm/balances";
+const TRANSACTIONS_PREFIX = "/beta/svm/transactions";
 
 const getBalanceQueryParams = (
   params: TokenBalancesParams
 ): URLSearchParams => {
   const queryParams = new URLSearchParams();
-  if (params.allChains) queryParams.append("all_chains", "true");
-  if (params.chainIds) queryParams.append("chain_ids", params.chainIds);
-  if (params.excludeSpamTokens)
-    queryParams.append("exclude_spam_tokens", "true");
-  if (params.filters) queryParams.append("filters", params.filters);
+  if (params.chains) queryParams.append("chains", params.chains);
   if (params.offset) queryParams.append("offset", params.offset.toString());
   if (params.limit) queryParams.append("limit", params.limit.toString());
-  if (params.metadata) queryParams.append("metadata", "logo,url");
   return queryParams;
 };
 
@@ -29,27 +24,23 @@ const getTransactionsQueryParams = (
   params: TransactionsParams
 ): URLSearchParams => {
   const queryParams = new URLSearchParams();
-  if (params.chainIds) queryParams.append("chain_ids", params.chainIds);
   if (params.offset) queryParams.append("offset", params.offset.toString());
   if (params.limit) queryParams.append("limit", params.limit.toString());
-  if (params.method_id) queryParams.append("method_id", params.method_id);
-  if (params.to) queryParams.append("to", params.to);
-  if (params.decode) queryParams.append("decode", params.decode.toString());
   return queryParams;
 };
 
-const getHeaders = (duneApiKey: string | undefined) => {
-  return duneApiKey
+const getHeaders = (simApiKey: string | undefined) => {
+  return simApiKey
     ? {
-        "x-dune-api-key": duneApiKey,
+        "X-Sim-Api-Key": simApiKey,
       }
     : undefined;
 };
 
-export async function fetchEvmBalances(
+export async function fetchSvmBalances(
   walletAddress: string,
   params: TokenBalancesParams,
-  duneApiKey: string | undefined,
+  simApiKey: string | undefined,
   proxyUrl: string | undefined
 ): Promise<BalanceData> {
   const queryParams = getBalanceQueryParams(params);
@@ -62,7 +53,7 @@ export async function fetchEvmBalances(
 
   const response = await fetch(apiUrl, {
     method: "GET",
-    headers: getHeaders(duneApiKey),
+    headers: getHeaders(simApiKey),
   });
 
   if (!response.ok) {
@@ -72,13 +63,10 @@ export async function fetchEvmBalances(
   return response.json();
 }
 
-/** @deprecated */
-export const fetchBalances = fetchEvmBalances;
-
-export async function fetchEvmTransactions(
+export async function fetchSvmTransactions(
   walletAddress: string,
   params: TransactionsParams,
-  duneApiKey: string | undefined,
+  simApiKey: string | undefined,
   proxyUrl: string | undefined
 ): Promise<TransactionData> {
   const queryParams = getTransactionsQueryParams(params);
@@ -86,7 +74,7 @@ export async function fetchEvmTransactions(
 
   const response = await fetch(apiUrl, {
     method: "GET",
-    headers: getHeaders(duneApiKey),
+    headers: getHeaders(simApiKey),
   });
 
   if (!response.ok) {
@@ -94,7 +82,4 @@ export async function fetchEvmTransactions(
   }
 
   return response.json();
-}
-
-/** @deprecated */
-export const fetchTransactions = fetchEvmTransactions;
+} 

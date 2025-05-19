@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { TokenBalancesParams, BalanceData, FetchError } from "./types";
-import { fetchSvmBalances } from "./duneApi";
+import { fetchSvmBalances } from "./simApi";
 import { useDeepMemo } from "../useDeepMemo";
 import { useGetApiKey, useGetProxyUrl } from "../provider";
 
@@ -34,7 +34,7 @@ export const useSvmTokenBalances = (
     if (!apiKey && !proxyUrl) {
       setState({
         data: null,
-        error: new Error("One of duneApiKey or proxyUrl must be provided"),
+        error: new Error("One of simApiKey or proxyUrl must be provided"),
         isLoading: false,
         nextOffset: null,
         offsets: [],

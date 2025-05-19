@@ -1,6 +1,10 @@
-# React Hooks for Dune Echo
+# React Hooks for sim APIs
 
-This project integrates with the Dune Echo APIs to provide easy access to token balances and transaction data for given wallets. It uses the DuneProvider to manage API key authorization and provides convenient hooks for fetching token balances and paginated transaction data.
+This project integrates with the [Dune's sim APIs](https://sim.dune.com/) to provide easy access to token balances and transaction data for given wallets. It uses the `SimProvider` to manage API key authorization and provides convenient React hooks for fetching token balances and paginated transaction data.
+
+# Prerequisites
+
+Please use Node.js >= 20.0.0 for development.
 
 # Installation
 
@@ -12,21 +16,21 @@ npm install @duneanalytics/hooks
 
 # Provider Setup
 
-To use the Dune API, wrap your application in the DuneProvider and provide your Dune API key:
+To use the sim APIs wrap your application in the `SimProvider` and provide your Sim API key:
 
 ```javascript
-import { DuneProvider } from "@duneanalytics/hooks";
+import { SimProvider } from "@duneanalytics/hooks";
 
 const App = () => (
-  <DuneProvider duneApiKey={YOUR_API_KEY}>
+  <SimProvider simApiKey={YOUR_API_KEY}>
     {/* Your app components */}
-  </DuneProvider>
+  </SimProvider>
 );
 ```
 
 # Props
 
-    •	duneApiKey: Required. The API key to authenticate your requests with Dune Analytics.
+- simApiKey: Required. The API key to authenticate your requests with sim APIs.
 
 # Hooks
 
@@ -69,14 +73,14 @@ const MyComponent = ({ account }) => {
 
 ### Parameters
 
-    •	walletAddress: Required. The Ethereum wallet address for which to fetch token balances.
-    •	params: Optional. Additional parameters for the request (e.g., chain or token filters).
+- walletAddress: Required. The Ethereum wallet address for which to fetch token balances.
+- params: Optional. Additional parameters for the request (e.g., chain or token filters).
 
 ### Returns
 
-    •	data: Contains the list of token balances.
-    •	isLoading: A boolean indicating whether the request is in progress.
-    •	error: Contains any error that occurred during the request.
+- data: Contains the list of token balances.
+- isLoading: A boolean indicating whether the request is in progress.
+- error: Contains any error that occurred during the request.
 
 ## useTransactions
 
@@ -123,17 +127,17 @@ const TransactionHistory = ({ account }) => {
 
 ### Parameters
 
-    •	walletAddress: Required. The Ethereum wallet address for which to fetch transactions.
-    •	params: Optional. Additional parameters for the request (e.g., chain or block filters).
+- walletAddress: Required. The Ethereum wallet address for which to fetch transactions.
+- params: Optional. Additional parameters for the request (e.g., chain or block filters).
 
 ### Returns
 
-    •	data: Contains the transaction data for the current page.
-    •	isLoading: A boolean indicating whether the request is in progress.
-    •	error: Contains any error that occurred during the request.
-    •	nextPage: Function to fetch the next page of transactions.
-    •	previousPage: Function to fetch the previous page of transactions.
-    •	currentPage: The current page number (0-based index).
+- data: Contains the transaction data for the current page.
+- isLoading: A boolean indicating whether the request is in progress.
+- error: Contains any error that occurred during the request.
+- nextPage: Function to fetch the next page of transactions.
+- previousPage: Function to fetch the previous page of transactions.
+- currentPage: The current page number (0-based index).
 
 ### Error Handling
 
@@ -145,10 +149,6 @@ if (error) {
   return <p>Error: {error.message}</p>;
 }
 ```
-
-# Development
-
-Please use node v20 for development.
 
 # Deploying
 
