@@ -1,4 +1,6 @@
-# React Hooks for Sim APIs
+# React Hooks for Sim APIs (DEPRECATED - NO LONGER MAINTAINED)
+
+> This repository is **no longer maintained and has been deprecated**. Please integrate directly with the [Sim API endpoints](https://docs.sim.dune.com/) instead of using this repo.
 
 This project integrates with the [Dune's Sim APIs](https://sim.dune.com/) to provide easy access to token balances and transaction data for given wallets. It uses the `SimProvider` to manage API key authorization and provides convenient React hooks for fetching token balances and paginated transaction data.
 
